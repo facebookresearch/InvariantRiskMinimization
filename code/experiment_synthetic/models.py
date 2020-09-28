@@ -81,7 +81,7 @@ class InvariantRiskMinimization(object):
                                                                       w_str))
 
     def solution(self):
-        return self.phi @ self.w
+        return (self.phi @ self.w).view(-1, 1)
 
 
 class InvariantCausalPrediction(object):
@@ -159,7 +159,7 @@ class InvariantCausalPrediction(object):
         return chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))
 
     def solution(self):
-        return self.coefficients
+        return self.coefficients.view(-1, 1)
 
 
 class EmpiricalRiskMinimizer(object):
@@ -168,7 +168,7 @@ class EmpiricalRiskMinimizer(object):
         y_all = torch.cat([y for (x, y) in environments]).numpy()
 
         w = LinearRegression(fit_intercept=False).fit(x_all, y_all).coef_
-        self.w = torch.Tensor(w)
+        self.w = torch.Tensor(w).view(-1, 1)
 
     def solution(self):
         return self.w

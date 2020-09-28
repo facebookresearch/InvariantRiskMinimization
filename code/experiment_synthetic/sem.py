@@ -6,15 +6,13 @@
 #
 
 import torch
-import numpy as np
 
 
 class ChainEquationModel(object):
-    def __init__(self, dim, scramble=False, hetero=True, hidden=False):
+    def __init__(self, dim, ones=True, scramble=False, hetero=True, hidden=False):
         self.hetero = hetero
         self.hidden = hidden
         self.dim = dim // 2
-        ones = True
 
         if ones:
             self.wxy = torch.eye(self.dim)
@@ -39,7 +37,7 @@ class ChainEquationModel(object):
 
     def solution(self):
         w = torch.cat((self.wxy.sum(1), torch.zeros(self.dim))).view(-1, 1)
-        return self.scramble.t() @ w
+        return w, self.scramble
 
     def __call__(self, n, env):
         h = torch.randn(n, self.dim) * env

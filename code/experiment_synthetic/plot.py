@@ -19,17 +19,17 @@ def parse_title(title):
     result = ""
     fields = title.split("_")
 
-    if fields[1].split("=")[1] == "1":
+    if fields[2].split("=")[1] == "1":
         result += "P"
     else:
         result += "F"
 
-    if fields[2].split("=")[1] == "1":
+    if fields[3].split("=")[1] == "1":
         result += "E"
     else:
         result += "O"
 
-    if fields[3].split("=")[1] == "1":
+    if fields[4].split("=")[1] == "1":
         result += "S"
     else:
         result += "U"
@@ -144,9 +144,12 @@ def plot_experiment(all_solutions, category, fname):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        fname = "synthetic_results.pt"
+        fname = "synthetic_results.txt"
     else:
         fname = sys.argv[1]
-    lines = torch.load(fname)
+
+    with open(fname, "r") as f:
+        lines = f.readlines()
+
     plot_experiment(lines, "F", "results_f.pdf")
     plot_experiment(lines, "P", "results_p.pdf")
